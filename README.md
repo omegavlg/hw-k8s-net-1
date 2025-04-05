@@ -130,3 +130,36 @@ curl svc-nginx-mt:9002
 3. Предоставить манифест и Service в решении, а также скриншоты или вывод команды п.2.
 
 ### Ответ:
+
+1. Создаем отдельный манифест сервиса **service-nginx.yaml**, который обеспечит доступ снаружи кластера к **nginx**:
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-nginx-nodeport
+spec:
+  type: NodePort
+  selector:
+    app: my-app
+  ports:
+    - name: nginx
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+```
+
+```
+sudo kubectl apply -f service-nginx.yaml
+```
+
+```
+sudo kubectl get svc
+```
+
+<img src = "img/05.png" width = 100%>
+
+2. Проверяем доступ к сервису с локальной машины:
+
+<img src = "img/06.png" width = 100%>
